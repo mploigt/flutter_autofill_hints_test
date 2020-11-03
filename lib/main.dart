@@ -48,9 +48,15 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  void _submit() {
+  void _submit(BuildContext context) {
     print(_usernameController.text);
     print(_passwordController.text);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) =>
+              LoggedIn(_usernameController.text, _passwordController.text)),
+    );
   }
 
   @override
@@ -95,14 +101,14 @@ class _MyHomePageState extends State<MyHomePage> {
                       controller: _passwordController,
                       autofillHints: const <String>[AutofillHints.password],
                       onFieldSubmitted: (value) {
-                        _submit();
+                        _submit(context);
                       },
                     ),
                     RaisedButton(
                       textColor: Colors.white,
                       color: Colors.blue,
                       child: Text('Login'),
-                      onPressed: _submit,
+                      onPressed: () => _submit(context),
                     ),
                   ],
                 ),
@@ -112,5 +118,28 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+}
+
+class LoggedIn extends StatelessWidget {
+  const LoggedIn(this.username, this.password);
+
+  final String username;
+  final String password;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Logged In'),
+        ),
+        body: SafeArea(
+            child: Padding(
+                padding: EdgeInsets.all(20),
+                child: Text(
+                  'Logged In as "$username" with password "$password"',
+                  softWrap: true,
+                  maxLines: 5,
+                ))));
   }
 }
